@@ -44,12 +44,21 @@ def getRandomShield(current):
     # 3000 - 5000 : could be Small, Big or None
     # 5000 - 9000 : could be Small, None
 
-    if 0 <= current <= 3000:
-        return (0, 3000)
-    if 3000 <= current <= 5000:
-        return (3000, 5000)
-    else:
-        return (5000, 9000)
+    def filterUnwanted(pair):
+        _, value = pair
+        if 0 <= current <= 3000:
+            if value < 400:
+                return False
+            else:
+                return True
+        if 3000 <= current <= 5000:
+            return True
+        else:
+            if value > 400:
+                return False
+            else:
+                return True
+    return random.choice(list(filter(filterUnwanted, armor.items())))
 
 # Main script
 parser = argparse.ArgumentParser(
@@ -97,7 +106,6 @@ elif args.continuous:
             clear()
         currentPrice = 0
         pistol, pistolPrice = getRandomPistol(targetPrice)
-        print(pistol, pistolPrice)
     result = "continuous"
 else:
     result = "Armor: " + random.choice(list(armor.keys())) + "\nSecondary: " + \
