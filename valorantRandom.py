@@ -1,6 +1,6 @@
 import random
 import argparse
-from os import system, name
+from os import name, system
 
 # Helper functions
 def clear():
