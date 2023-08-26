@@ -137,10 +137,12 @@ if args.agent:
     print(result)
 elif args.rules:
     result = "Choose a random agent to play.\nAfter that choose random weapons.\n"
-    result += "If the main weapon you have to buy is too expensive you can skip buying the main gun.\n"
+    result += "If you play the continuous mode you need to only input the correct amount of money for the current round.\nEverything else will be done by the script.\n"
+    result += "In the event that you play the normal weapons mode use the following rules:\nIf the main weapon you have to buy is too expensive you can skip buying the main gun.\n"
     result += "Buying the pistol is mandatory. If the shield is too expensive you skip buying it too.\n"
-    result += "Abilities are bought afterwards with the leftover money.\nSwitching to weapons you find is forbiden (exception is if the gun is the same as the one the randomiser has chosen for you).\n"
-    result += "Ults can be used whenever.\n\nThats it have fun. :)\nPS: You can see all avaliable commands with '-h'."
+    result += "Abilities are bought afterwards with the leftover money.\nSwitching to weapons you find is forbiden (exception is if the gun is the same as the one you have now).\n"
+    result += "For both modes:\nif you survive the round you have to stay with the same weapons as the previous one and "
+    result += "ults can be used whenever.\n\nThats it have fun. :)\nPS: You can see all avaliable commands with '-h'."
     print(result);
 elif args.continuous:
     print("You started the continuous process that lasts untill you enter 0 as a parameter.")
