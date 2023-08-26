@@ -15,50 +15,94 @@ def clear():
 
 def getRandomPistol(current):
     # Returns 2 values for a pistol name and its price depending on the money entered.
-    # 0 - 3000 : could be Sheriff and Ghost 
+    # 0 - 800 : could be Classic, Frenzy, Shorty, Sheriff, Ghost (All of them)
+    # 800 - 3000 : could be Sheriff and Ghost 
     # 3000 - 5000 : could be Frenzy, Shorty, Classic and None
     # 5000 - 9000 : could be Shorty, Classic or None
 
     def filterUnwanted(pair):
-        _, value = pair
-        if 0 <= current <= 3000:
+        key, value = pair
+        if 0 <= current <= 800:
+            if value == 0 and key == "None":
+                return False
+            if current < value:
+                return False
+            return True
+        if 800 < current <= 3000:
             if value < 500:
                 return False
-            else:
-                return True
-        if 3000 <= current <= 5000:
+            return True
+        if 3000 < current <= 5000:
             if value >= 500:
                 return False
-            else:
-                return True
+            return True
         else:
             if value >= 450:
                 return False
-            else:
-                return True
+            return True
     return random.choice(list(filter(filterUnwanted, pistols.items())))
 
 def getRandomShield(current):
     # Returns 2 values for a shield name and its price depending on the money entered.
-    # 0 - 3000 : could be Small or Big
+    # 0 - 400 : could be None
+    # 400 - 1000 : could be None, Small
+    # 1000 - 3000 : could be Small or Big 
     # 3000 - 5000 : could be Small, Big or None
     # 5000 - 9000 : could be Small, None
 
     def filterUnwanted(pair):
         _, value = pair
-        if 0 <= current <= 3000:
+        if 0 <= current < 400:
+            if value < 400:
+                return True
+            return False
+        if 400 <= current <= 1000:
+            if value < 1000:
+                return True
+            return False
+        if 1000 < current <= 3000:
             if value < 400:
                 return False
-            else:
-                return True
-        if 3000 <= current <= 5000:
+            return True
+        if 3000 < current <= 5000:
             return True
         else:
             if value > 400:
                 return False
-            else:
-                return True
+            return True
     return random.choice(list(filter(filterUnwanted, armor.items())))
+
+def getRandomGun(current):
+    # Returns 2 values for a main gun name and its price depending on the money entered.
+    # 0 - 800 : could be None
+    # 800 - 1800: could be None, Stinger, Spectre, Bucky, Marshal, Ares (850 - 1600$)
+    # 1800 - 2600 : could be Stinger, Spectre, Judge, Buldog, Guardian, Marshal, Ares (950 - 2250$)
+    # 2600 - 3500 : could be Judge, Buldog, Guardian, Phantom, Vandal, Marshal, Odin (950 - 3200$ , but without 1100, 1600)
+    # 3500 - 9000 : could be Phantom, Vandal, Operator, Odin, Guardian (2250 - 4700$)
+
+    def filterUnwanted(pair):
+        _, value = pair
+        if 0 <= current <= 800:
+            if value > 0:
+                return False
+            return True
+        if 800 < current <= 1800:
+            if 0 <= value <= 1600:
+                return True
+            return False
+        if 1800 < current <= 2600:
+            if 950 <= value <= 2250:
+                return True
+            return False
+        if 2600 < current <= 3500:
+            if 950 <= value <= 3200 and value != 1100 and value != 1600:
+                return True
+            return False
+        else:
+            if value >= 2250:
+                return True
+            return False
+    return random.choice(list(filter(filterUnwanted, guns.items())))
 
 # Main script
 parser = argparse.ArgumentParser(
@@ -100,13 +144,20 @@ elif args.rules:
 elif args.continuous:
     print("You started the continuous process that lasts untill you enter 0 as a parameter.")
     targetPrice = -1
-    while targetPrice != 0:
-        targetPrice = int(input("Enter the first price for the round: "))
+    while True:
+        targetPrice = abs(int(input("Enter the first price for the round: ")))
         if(targetPrice != -1):
             clear()
+        if(targetPrice == 0):
+            break
         currentPrice = 0
         pistol, pistolPrice = getRandomPistol(targetPrice)
-    result = "continuous"
+        currentPrice += pistolPrice
+        shield, shieldPrice = getRandomShield(abs(targetPrice - currentPrice))
+        currentPrice += shieldPrice
+        gun, gunPrice = getRandomGun(abs(targetPrice - currentPrice))
+        result = "Armor: " + shield + "\nSecondary: " + pistol + "\nMain: " + gun
+        print(result)
 else:
     result = "Armor: " + random.choice(list(armor.keys())) + "\nSecondary: " + \
         random.choice(list(pistols.keys())) + "\nMain: " + random.choice(list(guns.keys()))
