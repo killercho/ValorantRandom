@@ -134,6 +134,7 @@ agents = ["Astra", "Breach", "Brimstone", "Deadlock", "Chamber", "Cypher", "Fade
 
 if args.agent:
     result = "Agent: " + random.choice(agents)
+    print(result)
 elif args.rules:
     result = "Choose a random agent to play.\nAfter that choose random weapons.\n"
     result += "If the main weapon you have to buy is too expensive you can skip buying the main gun.\n"
